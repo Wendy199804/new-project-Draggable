@@ -6,7 +6,7 @@
             had chart
         </div>
 
-        <img :src="blob" alt="" />
+        <img v-show="finished" :src="blob" alt="" />
     </div>
 </template>
 
@@ -25,7 +25,6 @@ export default {
         render() {
             this.$nextTick(() => {
                 this.draw()
-                setTimeout(() => {}, 500)
             })
         },
         toimg() {

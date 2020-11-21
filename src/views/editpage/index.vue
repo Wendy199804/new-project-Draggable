@@ -91,8 +91,9 @@
                             <span @click.stop="deleteItem(element, index)">删除</span>
                             <span @click.stop="addArticle(element, index)">添加文案</span>
                         </div>
-                        <i v-show="element.choosed" class="el-icon-s-unfold handle move-icon"></i>
-                        <i v-show="element.choosed" @click.stop="clickMove(element)" class="el-icon-s-unfold move-icon"></i>
+                        <!-- <i v-show="element.choosed" class="el-icon-s-unfold handle"></i> -->
+                        <!-- <i class="el-icon-s-unfold " v-show="element.choosed"></i> -->
+                        <span class="handle" v-show="element.choosed">移动</span>
                         {{ element.name }}
                         <!-- <el-button circle @click.stop="deleteItem(element, index)">×</el-button> -->
                         <div class="a-component">
@@ -135,7 +136,7 @@ export default {
             allComponents: allComponents,
             myArray: [
                 { id: 1, name: 'height: 400px;', delete: false, component: 'item_1' },
-                { id: 2, name: '柱状图', delete: false, component: 'item_2' ,},
+                { id: 2, name: '柱状图', delete: false, component: 'item_2' },
                 { id: 3, name: 'c', delete: false, component: 'item_3' },
                 { id: 4, name: 'd', delete: false, component: 'item_4' },
                 { id: 5, name: '表格', delete: false, component: 'item_5', istable: true },
@@ -258,11 +259,19 @@ export default {
             obj.id = new Date().getTime() + 'id'
             obj.articleNum = 0
             obj.articlelist = []
-            choosed_index === -1 ? this.myArray2.push(obj) : this.myArray2.splice(choosed_index + 1, 0, obj) // 添加到选中元素后面
-            this.$nextTick(() => {
-                let len = this.myArray2.length - 1
-                this.$refs[`newImg${len}`][0].render()
-            })
+            if (choosed_index === -1) {
+                this.myArray2.push(obj)
+                this.$nextTick(() => {
+                    let len = this.myArray2.length - 1
+                    this.$refs[`newImg${len}`][0].render()
+                })
+            } else {
+                this.myArray2.splice(choosed_index + 1, 0, obj)
+                this.$nextTick(() => {
+                    let len = this.myArray2.length - 1
+                    this.$refs[`newImg${choosed_index + 1}`][0].render()
+                })
+            }
         },
         //拖拽结束  *****  add
         end1(ev) {
@@ -423,11 +432,11 @@ export default {
             this.myArray2.map((item, index) => {
                 item.choosed = false
                 if (!item.istable) {
+                    console.log(index)
                     this.$refs[`newImg${index}`][0].toimg() //在子组件里转
-                    // this.getImg(`newImg${index}`, index) //在父组件转 
+                    // this.getImg(`newImg${index}`, index) //在父组件转
                 }
             })
-            
         },
         getImg(newImg, index) {
             let that = this
@@ -481,6 +490,11 @@ export default {
         onafterprint() {
             this.printHtml = ''
             // console.log('after')
+            this.myArray2.map((item, index) => {
+                if (!item.istable) {
+                    this.$refs[`newImg${index}`][0].finished = false
+                }
+            })
         },
     },
 }
@@ -539,6 +553,7 @@ export default {
 }
 .handle {
     cursor: move;
+    padding: 20px;
 }
 //选中边框
 .border {
@@ -610,7 +625,7 @@ export default {
     color: rgb(148, 27, 27);
     // background-color: cadetblue;
 }
->>> .a-component{
+>>> .a-component {
     margin: 16px 0;
 }
 @media print {
