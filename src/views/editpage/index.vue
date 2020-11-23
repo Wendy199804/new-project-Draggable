@@ -1,63 +1,52 @@
 <template>
     <div class="wrap">
         <div>
-            <div>产品概览 <span @click="addAll(myArray)" class="cursor-pointer">全部添加</span></div>
-            <Draggable
-                class="cards-group"
-                v-model="myArray"
-                :animation="200"
-                :options="{
-                    sort: false,
-                    group: { name: 'group', pull: 'clone', put: false },
-                }"
-                ghostClass="ghost1"
-                @end="end1"
-            >
-                <transition-group>
-                    <div v-for="element in myArray" :key="element.id" class="draggable-item">
-                        {{ element.name }}
-                        <el-button circle @click="addItem(element)">+</el-button>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="功能模板" name="first">
+                    <div v-for="(dragitem, index) in toolslist" :key="index">
+                        <div>{{ dragitem.name }} <span @click="addAll(dragitem.list)" class="cursor-pointer">全部添加</span></div>
+                        <Draggable
+                            class="cards-group"
+                            v-model="dragitem.list"
+                            :animation="200"
+                            :options="{
+                                sort: false,
+                                group: { name: 'group', pull: 'clone', put: false }
+                            }"
+                            ghostClass="ghost1"
+                            @end="end1"
+                        >
+                            <transition-group>
+                                <div v-for="element in dragitem.list" :key="element.id" class="draggable-item">
+                                    {{ element.name }}
+                                    <el-button circle @click="addItem(element)">+</el-button>
+                                </div>
+                            </transition-group>
+                        </Draggable>
                     </div>
-                </transition-group>
-            </Draggable>
-            <div>基金经理1 <span @click="addAll(manager1)" class="cursor-pointer">全部添加</span></div>
-            <Draggable
-                class="cards-group"
-                v-model="manager1"
-                :animation="200"
-                :options="{
-                    sort: false,
-                    group: { name: 'group', pull: 'clone', put: false },
-                }"
-                ghostClass="ghost1"
-                @end="end1"
-            >
-                <transition-group>
-                    <div v-for="element in manager1" :key="element.id" class="draggable-item">
-                        {{ element.name }}
-                        <el-button circle @click="addItem(element)">+</el-button>
-                    </div>
-                </transition-group>
-            </Draggable>
-            <div>基金经理2 <span @click="addAll(manager2)" class="cursor-pointer">全部添加</span></div>
-            <Draggable
-                class="cards-group"
-                v-model="manager2"
-                :animation="200"
-                :options="{
-                    sort: false,
-                    group: { name: 'group', pull: 'clone', put: false },
-                }"
-                ghostClass="ghost1"
-                @end="end1"
-            >
-                <transition-group>
-                    <div v-for="element in manager2" :key="element.id" class="draggable-item">
-                        {{ element.name }}
-                        <el-button circle @click="addItem(element)">+</el-button>
-                    </div>
-                </transition-group>
-            </Draggable>
+                </el-tab-pane>
+                <el-tab-pane label="工具" name="second">
+                    <Draggable
+                            class="cards-group"
+                            v-model="toolslist2"
+                            :animation="200"
+                            :options="{
+                                sort: false,
+                                group: { name: 'group', pull: 'clone', put: false }
+                            }"
+                            ghostClass="ghost1"
+                            @end="end1"
+                        >
+                            <transition-group>
+                                <div v-for="element in toolslist2" :key="element.id" class="draggable-item">
+                                    {{ element.name }}
+                                    <el-button circle @click="addItem(element)">+</el-button>
+                                </div>
+                            </transition-group>
+                        </Draggable>
+                </el-tab-pane>
+            </el-tabs>
+            
         </div>
 
         <!-- 右边
@@ -75,14 +64,26 @@
                 :options="{
                     group: { name: 'group', fallbackTolerance: 0 },
                     scroll: true,
-                    scrollSpeed: 2,
+                    scrollSpeed: 2
                 }"
                 ghostClass="ghost2"
                 chosen-class="chosen"
                 handle=".handle"
             >
                 <transition-group id="printpdf">
-                    <div v-for="(element, index) in myArray2" :key="element.id" :class="[element.delete ? 'to-right' : '', element.choosed ? 'border' : '', 'list-group-item', 'my-list-group-item', 'cursor-auto']" @click="chooseItem(element, index)">
+                    <div
+                        v-for="(element, index) in myArray2"
+                        :key="element.id"
+                        :ref="`cur-com-${index}`"
+                        :class="[
+                            element.delete ? 'to-right' : '',
+                            element.choosed ? 'border' : '',
+                            'list-group-item',
+                            'my-list-group-item',
+                            'cursor-auto'
+                        ]"
+                        @click="chooseItem(element, index)"
+                    >
                         <div v-show="element.choosed" class="edit">
                             <span @click.stop="unChoosed(element, index)">取消选中</span>
                             <span @click.stop="moveUp(element, index)">上移</span>
@@ -96,17 +97,35 @@
                         <span class="handle" v-show="element.choosed">移动</span>
                         {{ element.name }}
                         <!-- <el-button circle @click.stop="deleteItem(element, index)">×</el-button> -->
-                        <div class="a-component">
-                            <component v-show="!element.blob" :is="allComponents[element.component]" :id="`newImg${index}`" :ref="`newImg${index}`"></component>
+                        <div class="a-component" :ref="`a-component-${index}`">
+                            <component
+                                v-show="!element.blob"
+                                :is="activeName==='first' ? allComponents[element.component] : allTools[element.component]"
+                                :id="`newImg${index}`"
+                                :ref="`newImg${index}`"
+                            ></component>
                             <img :src="element.blob" style="width: 100%" />
                         </div>
 
-                        <div v-show="element.articlelist && element.articlelist.length > 0" :style="{ border: element.choosed ? '1px dashed fuchsia' : 'none' }" @click.stop class="textarea-wrap">
+                        <div
+                            v-show="element.articlelist && element.articlelist.length > 0"
+                            :style="{ border: element.choosed ? '1px dashed fuchsia' : 'none' }"
+                            @click.stop
+                            class="textarea-wrap"
+                        >
                             <!-- <textarea>我是一个文本框。</textarea> -->
                             <div v-for="(item, index2) in element.articlelist" :key="index2">
                                 <!-- 文案个数 -->
-                                <div v-show="element.choosed && item.focus">文字颜色<el-color-picker v-model="item.color" @change="fontColorChange(index)" size="mini"></el-color-picker></div>
-                                <div :contenteditable="element.choosed" @focus="articleFocus(item, index, index2, $event)" @blur="articleBlur(item, index, index2, $event)" :style="{ color: item.color }" class="custom-article">
+                                <div v-show="element.choosed && item.focus">
+                                    文字颜色<el-color-picker v-model="item.color" @change="fontColorChange(index)" size="mini"></el-color-picker>
+                                </div>
+                                <div
+                                    :contenteditable="element.choosed"
+                                    @focus="articleFocus(item, index, index2, $event)"
+                                    @blur="articleBlur(item, index, index2, $event)"
+                                    :style="{ color: item.color }"
+                                    class="custom-article"
+                                >
                                     这是一个文案，点击可以编辑
                                 </div>
                             </div>
@@ -126,6 +145,8 @@
 <script>
 import Draggable from 'vuedraggable'
 import allComponents from '@/components/dragItems/exportComponent'
+import allTools from '@/components/tools/exportComponent'
+
 // import item_6 from '@/components/dragItems/item_6'
 import html2canvas from 'html2canvas'
 import iframePrint from '@/components/iframe/createIframe'
@@ -134,102 +155,117 @@ export default {
     data() {
         return {
             allComponents: allComponents,
-            myArray: [
-                { id: 1, name: 'height: 400px;', delete: false, component: 'item_1' },
-                { id: 2, name: '柱状图', delete: false, component: 'item_2' },
-                { id: 3, name: 'c', delete: false, component: 'item_3' },
-                { id: 4, name: 'd', delete: false, component: 'item_4' },
-                { id: 5, name: '表格', delete: false, component: 'item_5', istable: true },
-                { id: 6, name: '情景分析', delete: false, component: 'item_6' },
+            allTools:allTools,
+            toolslist: [
+                {
+                    name: '产品概览',
+                    list: [
+                        { id: 1, name: 'height: 400px;', delete: false, component: 'item_1' },
+                        { id: 2, name: '柱状图', delete: false, component: 'item_2' },
+                        { id: 3, name: 'c', delete: false, component: 'item_3' },
+                        { id: 4, name: 'd', delete: false, component: 'item_4' },
+                        { id: 5, name: '表格', delete: false, component: 'item_5', istable: true },
+                        { id: 6, name: '情景分析', delete: false, component: 'item_6' }
+                    ]
+                },
+                {
+                    name: '基金经理1',
+                    list: [
+                        {
+                            id: 1,
+                            name: 'manager1 a1111111111111',
+                            delete: false,
+                            component: 'item_1',
+                            manager_id: 1
+                        },
+                        {
+                            id: 2,
+                            name: 'manager1 b',
+                            delete: false,
+                            component: 'item_2',
+                            manager_id: 1
+                        },
+                        {
+                            id: 3,
+                            name: 'manager1 c',
+                            delete: false,
+                            component: 'item_3',
+                            manager_id: 1
+                        },
+                        {
+                            id: 4,
+                            name: 'manager1 d',
+                            delete: false,
+                            component: 'item_4',
+                            manager_id: 1
+                        },
+                        {
+                            id: 5,
+                            name: 'manager1 e',
+                            delete: false,
+                            component: 'item_5',
+                            manager_id: 1
+                        },
+                        {
+                            id: 6,
+                            name: 'manager1 f',
+                            delete: false,
+                            component: 'item_6',
+                            manager_id: 1
+                        }
+                    ]
+                },
+                {
+                    name: '基金经理2',
+                    list: [
+                        {
+                            id: 1,
+                            name: 'manager2 a',
+                            delete: false,
+                            component: 'item_1',
+                            manager_id: 2
+                        },
+                        {
+                            id: 2,
+                            name: 'manager2 b',
+                            delete: false,
+                            component: 'item_2',
+                            manager_id: 2
+                        },
+                        {
+                            id: 3,
+                            name: 'manager2 c',
+                            delete: false,
+                            component: 'item_3',
+                            manager_id: 2
+                        },
+                        {
+                            id: 4,
+                            name: 'manager2 d',
+                            delete: false,
+                            component: 'item_4',
+                            manager_id: 2
+                        },
+                        {
+                            id: 5,
+                            name: 'manager2 e',
+                            delete: false,
+                            component: 'item_5',
+                            manager_id: 2
+                        },
+                        {
+                            id: 6,
+                            name: 'manager2 f',
+                            delete: false,
+                            component: 'item_6',
+                            manager_id: 2
+                        }
+                    ]
+                }
             ],
-            manager1: [
-                {
-                    id: 1,
-                    name: 'manager1 a1111111111111',
-                    delete: false,
-                    component: 'item_1',
-                    manager_id: 1,
-                },
-                {
-                    id: 2,
-                    name: 'manager1 b',
-                    delete: false,
-                    component: 'item_2',
-                    manager_id: 1,
-                },
-                {
-                    id: 3,
-                    name: 'manager1 c',
-                    delete: false,
-                    component: 'item_3',
-                    manager_id: 1,
-                },
-                {
-                    id: 4,
-                    name: 'manager1 d',
-                    delete: false,
-                    component: 'item_4',
-                    manager_id: 1,
-                },
-                {
-                    id: 5,
-                    name: 'manager1 e',
-                    delete: false,
-                    component: 'item_5',
-                    manager_id: 1,
-                },
-                {
-                    id: 6,
-                    name: 'manager1 f',
-                    delete: false,
-                    component: 'item_6',
-                    manager_id: 1,
-                },
-            ],
-            manager2: [
-                {
-                    id: 1,
-                    name: 'manager2 a',
-                    delete: false,
-                    component: 'item_1',
-                    manager_id: 2,
-                },
-                {
-                    id: 2,
-                    name: 'manager2 b',
-                    delete: false,
-                    component: 'item_2',
-                    manager_id: 2,
-                },
-                {
-                    id: 3,
-                    name: 'manager2 c',
-                    delete: false,
-                    component: 'item_3',
-                    manager_id: 2,
-                },
-                {
-                    id: 4,
-                    name: 'manager2 d',
-                    delete: false,
-                    component: 'item_4',
-                    manager_id: 2,
-                },
-                {
-                    id: 5,
-                    name: 'manager2 e',
-                    delete: false,
-                    component: 'item_5',
-                    manager_id: 2,
-                },
-                {
-                    id: 6,
-                    name: 'manager2 f',
-                    delete: false,
-                    component: 'item_6',
-                    manager_id: 2,
-                },
-            ],
+            toolslist2:[{id: 1,name:'封面',delete: false, component: 'cover' },
+            {id: 2,name:'法律声明',delete: false, component: 'legalNotices' },],
+            
             myArray2: [
                 {
                     id: 7,
@@ -237,24 +273,25 @@ export default {
                     delete: false,
                     component: 'item_1',
                     articleNum: 0,
-                    articlelist: [],
-                },
+                    articlelist: []
+                }
             ],
             options: {
-                animation: 2,
+                animation: 2
             },
             blob: '',
             printHtml: '',
+            activeName: 'first'
         }
     },
     components: {
         Draggable,
-        iframePrint,
+        iframePrint
     },
     methods: {
         ///添加按钮  *****  add
         addItem(ele) {
-            let choosed_index = this.myArray2.findIndex((item) => item.choosed)
+            let choosed_index = this.myArray2.findIndex(item => item.choosed)
             let obj = Object.assign({}, ele)
             obj.id = new Date().getTime() + 'id'
             obj.articleNum = 0
@@ -264,14 +301,19 @@ export default {
                 this.$nextTick(() => {
                     let len = this.myArray2.length - 1
                     this.$refs[`newImg${len}`][0].render()
+                    obj.offsetTop = this.getmyOffsetTop(`cur-com-${len}`)
+                    this.$set(this.myArray2, len, obj)
                 })
             } else {
                 this.myArray2.splice(choosed_index + 1, 0, obj)
                 this.$nextTick(() => {
                     let len = this.myArray2.length - 1
                     this.$refs[`newImg${choosed_index + 1}`][0].render()
+                    obj.offsetTop = this.getmyOffsetTop(`cur-com-${choosed_index + 1}`)
+                    this.$set(this.myArray2, choosed_index + 1, obj)
                 })
             }
+            console.log(this.myArray2)
         },
         //拖拽结束  *****  add
         end1(ev) {
@@ -287,7 +329,7 @@ export default {
         },
         //全部添加  *****  add
         addAll(arr) {
-            let choosed_index = this.myArray2.findIndex((item) => item.choosed)
+            let choosed_index = this.myArray2.findIndex(item => item.choosed)
             arr = arr.map((item, index) => {
                 item.id = new Date().getTime() + 'id' + index
                 item.articleNum = 0
@@ -295,7 +337,10 @@ export default {
                 return { ...item }
             })
             let newarr = JSON.parse(JSON.stringify(arr))
-            this.myArray2 = choosed_index === -1 ? [...this.myArray2, ...arr] : [...this.myArray2.slice(0, choosed_index + 1), ...arr, ...this.myArray2.slice(choosed_index + 1)]
+            this.myArray2 =
+                choosed_index === -1
+                    ? [...this.myArray2, ...arr]
+                    : [...this.myArray2.slice(0, choosed_index + 1), ...arr, ...this.myArray2.slice(choosed_index + 1)]
         },
         //删除
         deleteItem(ele, index) {
@@ -307,10 +352,15 @@ export default {
                 this.myArray2.splice(index, 1)
             }, 200)
         },
+        //
+        getmyOffsetTop(name) {
+            console.count()
+            return this.$refs[name][0].offsetTop
+        },
         //选中（双击）
         chooseItem(ele, index) {
             if (!ele.choosed) {
-                this.myArray2 = this.myArray2.map((item) => {
+                this.myArray2 = this.myArray2.map(item => {
                     item.choosed = false
                     return item
                 })
@@ -432,7 +482,7 @@ export default {
             this.myArray2.map((item, index) => {
                 item.choosed = false
                 if (!item.istable) {
-                    console.log(index)
+                    console.log(this.$refs[`newImg${index}`][0])
                     this.$refs[`newImg${index}`][0].toimg() //在子组件里转
                     // this.getImg(`newImg${index}`, index) //在父组件转
                 }
@@ -456,8 +506,8 @@ export default {
             let context = canvas2.getContext('2d')
             context.scale(1, 1)
             html2canvas(_canvas, {
-                canvas: canvas2,
-            }).then((res) => {
+                canvas: canvas2
+            }).then(res => {
                 let blob = that.getBlob(res)
                 let obj = this.myArray2[index]
                 obj.blob = window.URL.createObjectURL(blob)
@@ -475,7 +525,7 @@ export default {
                 ia[i] = data.charCodeAt(i)
             }
             return new Blob([ia], {
-                type: 'image/jpeg',
+                type: 'image/jpeg'
             })
         },
         //打印 （会切割组件）
@@ -496,7 +546,10 @@ export default {
                 }
             })
         },
-    },
+        handleClick(tab, event) {
+            console.log(tab, event)
+        }
+    }
 }
 </script>
 
@@ -541,7 +594,6 @@ export default {
         display: block;
         // height: 300px;
         width: 100%;
-        border: 1px solid red;
     }
 }
 .to-right {
@@ -593,7 +645,9 @@ export default {
 .my-list-group-item {
     height: auto;
     position: relative;
-    .edit {
+    border-bottom: 2px dashed rgb(211, 78, 156);
+    margin: 16px 0;
+    /deep/.edit {
         padding: 3px 10px;
         background-color: rgba($color: #9cccec, $alpha: 0.8);
         position: absolute;

@@ -135,7 +135,6 @@ export default {
 .item5 {
     margin: 0;
     padding: 0;
-    border: 2px dashed #333333;
     padding: 16px;
     /deep/ .el-table {
         // border: 1px solid #3580bd;
