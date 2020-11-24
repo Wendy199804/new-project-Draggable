@@ -100,9 +100,10 @@
                         <div class="a-component" :ref="`a-component-${index}`">
                             <component
                                 v-show="!element.blob"
-                                :is="activeName==='first' ? allComponents[element.component] : allTools[element.component]"
+                                :is="allComponents[element.component]"
                                 :id="`newImg${index}`"
                                 :ref="`newImg${index}`"
+                                :choosed="element.choosed"
                             ></component>
                             <img :src="element.blob" style="width: 100%" />
                         </div>
@@ -126,7 +127,7 @@
                                     :style="{ color: item.color }"
                                     class="custom-article"
                                 >
-                                    这是一个文案，点击可以编辑
+                                    <b>这是一个文案，</b>点击可以编辑
                                 </div>
                             </div>
                         </div>
@@ -145,9 +146,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import allComponents from '@/components/dragItems/exportComponent'
-import allTools from '@/components/tools/exportComponent'
 
-// import item_6 from '@/components/dragItems/item_6'
 import html2canvas from 'html2canvas'
 import iframePrint from '@/components/iframe/createIframe'
 
@@ -155,7 +154,6 @@ export default {
     data() {
         return {
             allComponents: allComponents,
-            allTools:allTools,
             toolslist: [
                 {
                     name: '产品概览',
@@ -263,8 +261,8 @@ export default {
                     ]
                 }
             ],
-            toolslist2:[{id: 1,name:'封面',delete: false, component: 'cover' },
-            {id: 2,name:'法律声明',delete: false, component: 'legalNotices' },],
+            toolslist2:[{id: 1,name:'封面',delete: false, component: 'tools/cover' },
+            {id: 2,name:'法律声明',delete: false, component: 'tools/legalNotices' },],
             
             myArray2: [
                 {
@@ -287,6 +285,24 @@ export default {
     components: {
         Draggable,
         iframePrint
+    },
+    activated(){
+        console.log('activated'); // === mounted
+        !localStorage.getItem('list') && localStorage.setItem('list',JSON.stringify([]))
+        this.myArray2 = JSON.parse(localStorage.getItem('list'))[0]
+    },
+    deactivated(){
+        console.log('deactivated'); // === beforeDestroy
+        localStorage.setItem('list',JSON.stringify([this.myArray2]))
+    },
+    mounted() {
+        console.log('mounted');
+        !localStorage.getItem('list') && localStorage.setItem('list',JSON.stringify([]))
+        this.myArray2 = JSON.parse(localStorage.getItem('list'))[0]
+    },
+    beforeDestroy() {
+        console.log(beforeDestroy);
+        localStorage.setItem('list',JSON.stringify([this.myArray2]))
     },
     methods: {
         ///添加按钮  *****  add
@@ -313,7 +329,7 @@ export default {
                     this.$set(this.myArray2, choosed_index + 1, obj)
                 })
             }
-            console.log(this.myArray2)
+            // console.log(this.myArray2)
         },
         //拖拽结束  *****  add
         end1(ev) {
@@ -354,7 +370,7 @@ export default {
         },
         //
         getmyOffsetTop(name) {
-            console.count()
+            // console.count()
             return this.$refs[name][0].offsetTop
         },
         //选中（双击）
@@ -482,7 +498,7 @@ export default {
             this.myArray2.map((item, index) => {
                 item.choosed = false
                 if (!item.istable) {
-                    console.log(this.$refs[`newImg${index}`][0])
+                    // console.log(this.$refs[`newImg${index}`][0])
                     this.$refs[`newImg${index}`][0].toimg() //在子组件里转
                     // this.getImg(`newImg${index}`, index) //在父组件转
                 }
@@ -547,7 +563,7 @@ export default {
             })
         },
         handleClick(tab, event) {
-            console.log(tab, event)
+            // console.log(tab, event)
         }
     }
 }

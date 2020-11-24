@@ -63,7 +63,7 @@ export const constantRoutes = [
       path: 'edit-page',
       name: 'editPage',
       component: () => import('@/views/editpage/index'),
-      meta: { title: 'demo', icon: 'dashboard' }
+      meta: { title: 'demo', icon: 'dashboard',keepAlive: true }
     }]
   },
 
