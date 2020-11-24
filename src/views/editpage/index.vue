@@ -27,26 +27,25 @@
                 </el-tab-pane>
                 <el-tab-pane label="工具" name="second">
                     <Draggable
-                            class="cards-group"
-                            v-model="toolslist2"
-                            :animation="200"
-                            :options="{
-                                sort: false,
-                                group: { name: 'group', pull: 'clone', put: false }
-                            }"
-                            ghostClass="ghost1"
-                            @end="end1"
-                        >
-                            <transition-group>
-                                <div v-for="element in toolslist2" :key="element.id" class="draggable-item">
-                                    {{ element.name }}
-                                    <el-button circle @click="addItem(element)">+</el-button>
-                                </div>
-                            </transition-group>
-                        </Draggable>
+                        class="cards-group"
+                        v-model="toolslist2"
+                        :animation="200"
+                        :options="{
+                            sort: false,
+                            group: { name: 'group', pull: 'clone', put: false }
+                        }"
+                        ghostClass="ghost1"
+                        @end="end1"
+                    >
+                        <transition-group>
+                            <div v-for="element in toolslist2" :key="element.id" class="draggable-item">
+                                {{ element.name }}
+                                <el-button circle @click="addItem(element)">+</el-button>
+                            </div>
+                        </transition-group>
+                    </Draggable>
                 </el-tab-pane>
             </el-tabs>
-            
         </div>
 
         <!-- 右边
@@ -261,9 +260,11 @@ export default {
                     ]
                 }
             ],
-            toolslist2:[{id: 1,name:'封面',delete: false, component: 'tools/cover' },
-            {id: 2,name:'法律声明',delete: false, component: 'tools/legalNotices' },],
-            
+            toolslist2: [
+                { id: 1, name: '封面', delete: false, component: 'tools/cover' },
+                { id: 2, name: '法律声明', delete: false, component: 'tools/legalNotices' }
+            ],
+
             myArray2: [
                 {
                     id: 7,
@@ -286,25 +287,36 @@ export default {
         Draggable,
         iframePrint
     },
-    activated(){
-        console.log('activated'); // === mounted
-        !localStorage.getItem('list') && localStorage.setItem('list',JSON.stringify([]))
+    activated() {
+        // console.log('activated') // === mounted 页面缓存时生效
+        !localStorage.getItem('list') && localStorage.setItem('list', JSON.stringify([]))
         this.myArray2 = JSON.parse(localStorage.getItem('list'))[0]
     },
-    deactivated(){
-        console.log('deactivated'); // === beforeDestroy
-        localStorage.setItem('list',JSON.stringify([this.myArray2]))
+    deactivated() {
+        // console.log('deactivated') // === beforeDestroy 页面缓存时生效
+        localStorage.setItem('list', JSON.stringify([this.myArray2]))
     },
-    mounted() {
-        console.log('mounted');
-        !localStorage.getItem('list') && localStorage.setItem('list',JSON.stringify([]))
-        this.myArray2 = JSON.parse(localStorage.getItem('list'))[0]
+    async mounted() {
+        console.log('mounted')  // 刷新执行  页面缓存时失效
+        !localStorage.getItem('list') && localStorage.setItem('list', JSON.stringify([[]]))
+        this.myArray2 = JSON.parse(await localStorage.getItem('list'))[0]
+        this.myArray2 && this.myArray2.forEach((item,index)=>{
+            this.$nextTick(()=>{
+                this.$refs[`newImg${index}`][0].render()
+            })
+        })
     },
     beforeDestroy() {
-        console.log(beforeDestroy);
-        localStorage.setItem('list',JSON.stringify([this.myArray2]))
+        // console.log(beforeDestroy)
+        localStorage.setItem('list', JSON.stringify([this.myArray2]))
     },
     methods: {
+        // setItem(name,val){
+        //     localStorage.setItem(name, JSON.stringify(val))
+        // },
+        // getItem(name){
+        //     return JSON.parse(localStorage.getItem(name)) 
+        // },
         ///添加按钮  *****  add
         addItem(ele) {
             let choosed_index = this.myArray2.findIndex(item => item.choosed)
@@ -328,6 +340,7 @@ export default {
                     obj.offsetTop = this.getmyOffsetTop(`cur-com-${choosed_index + 1}`)
                     this.$set(this.myArray2, choosed_index + 1, obj)
                 })
+                
             }
             // console.log(this.myArray2)
         },
@@ -338,7 +351,10 @@ export default {
                 obj.id = new Date().getTime() + 'id'
                 obj.articleNum = 0
                 obj.articlelist = []
-                this.myArray2[ev.newDraggableIndex] = Object.assign({}, obj)
+                this.$set(this.myArray2,ev.newDraggableIndex,obj)
+                this.$nextTick(()=>{
+                    this.$refs[`newImg${ev.newDraggableIndex}`][0].render()
+                })
             } else {
                 console.log('not clone')
             }

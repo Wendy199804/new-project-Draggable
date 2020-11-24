@@ -6,8 +6,9 @@
                 <el-tab-pane label="工具" name="second">工具</el-tab-pane>
             </el-tabs>
         </div>
+        <div></div>
         <div>
-            <div class="main-edit-container"></div>
+            <div class="main-edit-container">12</div>
         </div>
     </div>
 </template>
@@ -35,19 +36,27 @@ export default {
 
 <style lang="scss" scoped>
 .edit-container {
-    padding: 16px 0 16px 16px;
+    padding: 16px 0 0px 16px;
     background: #ebebeb;
     display: flex;
     justify-content: flex-start;
+    height: calc(100vh - 50px);
+    overflow: hidden;
     & > div:first-child {
         width: 17.375rem;
-        height: calc(100vh - 66px);
+        height: calc(100vh - 82px);
         flex-shrink: 0;
         background: #ffffff;
         border: 1px solid #aaaaaa;
+        position: fixed;
+        top:66px
     }
     & > div:nth-child(2) {
+        width: 17.375rem;
+    }
+    & > div:last-child {
         width: calc(100vw - 17.375rem);
+        overflow-y: auto;
     }
     .main-edit-container {
         width: 49.5625rem;
