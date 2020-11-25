@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 24" width="32" height="24">
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #f0f7ff;stroke: #4e7cee } 
+		.shp1 { fill: #4e7cee } 
+	</style>
+	<g id="迭代2">
+		<g id="3_1基金研究收益与风险-柱状图">
+			<g id="柱状图">
+				<path id="矩形" fill-rule="evenodd" class="shp0" d="M0.5 23.5L0.5 0.5L28 0.5C29.93 0.5 31.5 2.07 31.5 4L31.5 20C31.5 21.93 29.93 23.5 28 23.5L0.5 23.5Z" />
+				<path id="矩形" class="shp1" d="M20 7L20 7C20 7.55 19.55 8 19 8L9 8C8.45 8 8 7.55 8 7L8 7C8 6.45 8.45 6 9 6L19 6C19.55 6 20 6.45 20 7Z" />
+				<path id="矩形备份" class="shp1" d="M24 12L24 12C24 12.55 23.55 13 23 13L9 13C8.45 13 8 12.55 8 12L8 12C8 11.45 8.45 11 9 11L23 11C23.55 11 24 11.45 24 12Z" />
+				<path id="矩形备份-2" class="shp1" d="M20 17L20 17C20 17.55 19.55 18 19 18L9 18C8.45 18 8 17.55 8 17L8 17C8 16.45 8.45 16 9 16L19 16C19.55 16 20 16.45 20 17Z" />
+			</g>
+		</g>
+	</g>
+</svg>

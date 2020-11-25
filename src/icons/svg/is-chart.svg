@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="24px" viewBox="0 0 32 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <!-- <title>矩形</title> -->
+    <desc>Created with Sketch.</desc>
+    <g id="迭代2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3_1基金研究收益与风险-表格" transform="translate(-1208.000000, -297.000000)">
+            <g id="柱状图" transform="translate(1208.000000, 297.000000)">
+                <path d="M31.5,23.5 L31.5,0.5 L4,0.5 C2.06700338,0.5 0.5,2.06700338 0.5,4 L0.5,20 C0.5,21.9329966 2.06700338,23.5 4,23.5 L31.5,23.5 Z" id="矩形" stroke="#AAAAAA" fill="#FFFFFF"></path>
+                <rect id="矩形" fill="#AAAAAA" x="8" y="8" width="2" height="12" rx="1"></rect>
+                <rect id="矩形备份" fill="#AAAAAA" x="15" y="4" width="2" height="16" rx="1"></rect>
+                <rect id="矩形备份-2" fill="#AAAAAA" x="22" y="8" width="2" height="12" rx="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

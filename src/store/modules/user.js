@@ -1,97 +1,110 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import { login } from "@/api/user";
+import {
+    getToken,
+    setToken,
+    removeToken,
+    getExpiredTime,
+    setExpiredTime,
+    getUser,
+    setUser,
+    removeUser
+} from "@/utils/auth";
+import { resetRouter } from "@/router";
+import { getUserinfo } from "@/api/user";
 
-const getDefaultState = () => {
-  return {
-    token: getToken(),
-    name: '',
-    avatar: ''
-  }
-}
-
-const state = getDefaultState()
+const state = {
+    token: getToken() || '',
+    userInfo: getUser() || { username: '', company: '', userId: '' },
+    loginError: {}
+};
 
 const mutations = {
-  RESET_STATE: (state) => {
-    Object.assign(state, getDefaultState())
-  },
-  SET_TOKEN: (state, token) => {
-    state.token = token
-  },
-  SET_NAME: (state, name) => {
-    state.name = name
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
-  }
-}
+    SET_TOKEN: (state, data) => {
+        state.token = data
+    },
+    SET_USERINFO: (state, data) => {
+        state.userInfo = data
+    },
+    SET_LOGINERROR: (state, data) => {
+        state.loginError = data
+    }
+};
 
 const actions = {
-  // user login
-  login({ commit }, userInfo) {
-    const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
+    // 用户登录
+    login({ commit }, { username, password }) {
+        return new Promise((resolve, reject) => {
+            login({
+                username: username.trim(),
+                password: password
+            })
+            .then(res => {
+                commit("SET_LOGINERROR", '')
+                commit("SET_TOKEN", res.token);
+                setToken(res.token);
+                setExpiredTime(res.expiresIn);
+                getUserinfo().then(res => {
+                    commit("SET_USERINFO", res);
+                    setUser(res);
+                    localStorage.setItem(
+                        "selectFundsToCompare",
+                        JSON.stringify([])
+                    );
+                    resolve();
+                });
+                resolve();
+            })
+            .catch(error => {
+                commit("SET_LOGINERROR", error)
+                reject(error);
+            });
+        });
+    },
 
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+    // 用户登出
+    logout({ commit, dispatch }) {
+        return new Promise(resolve => {
+            commit("SET_TOKEN", "");
+            removeToken();
 
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
+            commit("SET_USERINFO", { username: "", company: "", userId: "" });
+            removeUser();
 
-        const { name, avatar } = data
+            resetRouter();
+            // 清除基金评测、基金比较数据
+            dispatch("FundAnalyze/clear", {}, { root: true });
+            // dispatch("FundsCompare/clear", {}, { root: true });
+            // localStorage.removeItem("selectFundsToCompare");
+            // localStorage.removeItem("compareFundsDateList");
+            // localStorage.removeItem("compareFundsDateRange");
+            resolve();
+        });
+    },
 
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
+    resetToken({ commit }, token) {
+        commit("SET_TOKEN", token);
+        setToken(token);
+    },
 
-  // user logout
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
+    getUserInfo({ commit }) {
+        return new Promise(resolve => {
+            getUserinfo().then(res => {
+                commit('SET_USERINFO', res)
+                setUser(res)
+                resolve()
+            })
+        })
+    },
 
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      removeToken() // must remove  token  first
-      commit('RESET_STATE')
-      resolve()
-    })
-  }
-}
+    clearLoginError({ commit }) {
+        commit('SET_LOGINERROR', '')
+    }
+
+};
 
 export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions
-}
-
+    namespaced: true,
+    state,
+    mutations,
+    actions
+};

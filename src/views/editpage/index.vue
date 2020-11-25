@@ -1,5 +1,5 @@
 <template>
-    <div class="wrap">
+    <div class="wrap page">
         <div>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="功能模板" name="first">
@@ -145,6 +145,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import allComponents from '@/components/dragItems/exportComponent'
+import { mapGetters } from 'vuex'
 
 import html2canvas from 'html2canvas'
 import iframePrint from '@/components/iframe/createIframe'
@@ -159,7 +160,7 @@ export default {
                     list: [
                         { id: 1, name: 'height: 400px;', delete: false, component: 'item_1' },
                         { id: 2, name: '柱状图', delete: false, component: 'item_2' },
-                        { id: 3, name: 'c', delete: false, component: 'item_3' },
+                        { id: 3, name: '情景分析', delete: false, component: 'item_3' },
                         { id: 4, name: 'd', delete: false, component: 'item_4' },
                         { id: 5, name: '表格', delete: false, component: 'item_5', istable: true },
                         { id: 6, name: '情景分析', delete: false, component: 'item_6' }
@@ -283,6 +284,14 @@ export default {
             activeName: 'first'
         }
     },
+    computed: {
+        ...mapGetters(['selectFundToAnalyze','analyzeFundDateRange'])
+    },
+    watch: {
+        myArray2(val){
+            localStorage.setItem('list', JSON.stringify([this.myArray2]))
+        }
+    },
     components: {
         Draggable,
         iframePrint
@@ -294,17 +303,19 @@ export default {
     },
     deactivated() {
         // console.log('deactivated') // === beforeDestroy 页面缓存时生效
-        localStorage.setItem('list', JSON.stringify([this.myArray2]))
+        // localStorage.setItem('list', JSON.stringify([this.myArray2]))
     },
     async mounted() {
-        console.log('mounted')  // 刷新执行  页面缓存时失效
+        // console.log('mounted') // 刷新执行  页面缓存时失效
+        await this.updateStore()
         !localStorage.getItem('list') && localStorage.setItem('list', JSON.stringify([[]]))
         this.myArray2 = JSON.parse(await localStorage.getItem('list'))[0]
-        this.myArray2 && this.myArray2.forEach((item,index)=>{
-            this.$nextTick(()=>{
-                this.$refs[`newImg${index}`][0].render()
+        this.myArray2 &&
+            this.myArray2.forEach((item, index) => {
+                this.$nextTick(() => {
+                    this.$refs[`newImg${index}`][0].render()
+                })
             })
-        })
     },
     beforeDestroy() {
         // console.log(beforeDestroy)
@@ -315,7 +326,7 @@ export default {
         //     localStorage.setItem(name, JSON.stringify(val))
         // },
         // getItem(name){
-        //     return JSON.parse(localStorage.getItem(name)) 
+        //     return JSON.parse(localStorage.getItem(name))
         // },
         ///添加按钮  *****  add
         addItem(ele) {
@@ -340,7 +351,6 @@ export default {
                     obj.offsetTop = this.getmyOffsetTop(`cur-com-${choosed_index + 1}`)
                     this.$set(this.myArray2, choosed_index + 1, obj)
                 })
-                
             }
             // console.log(this.myArray2)
         },
@@ -351,8 +361,8 @@ export default {
                 obj.id = new Date().getTime() + 'id'
                 obj.articleNum = 0
                 obj.articlelist = []
-                this.$set(this.myArray2,ev.newDraggableIndex,obj)
-                this.$nextTick(()=>{
+                this.$set(this.myArray2, ev.newDraggableIndex, obj)
+                this.$nextTick(() => {
                     this.$refs[`newImg${ev.newDraggableIndex}`][0].render()
                 })
             } else {
@@ -580,12 +590,32 @@ export default {
         },
         handleClick(tab, event) {
             // console.log(tab, event)
-        }
+        },
+        /**更新store当前innercode */
+        async updateStore(val) {
+            await this.$store.dispatch('FundAnalyze/setSelectFundToAnalyze', {
+                firsttypeChi: '股票型',
+                innercode: 42741,
+                isNew: 0,
+                name: '招商医药健康产业股票',
+                raiseState: 5,
+                secondtypeChi: ['beta型'],
+                secucode: '000960',
+                type: 1
+            })
+        },
     }
 }
 </script>
 
 <style lang="scss" scoped>
+/deep/.content {
+    position: relative;
+    background-color: #ffffff;
+    .relative{
+        position: relative;
+    }
+}
 .wrap {
     display: flex;
     justify-content: center;
@@ -706,12 +736,12 @@ export default {
 .cursor-pointer {
     cursor: pointer;
 }
->>> .component-wrap {
+/deep/ .component-wrap {
     width: 100%;
     color: rgb(148, 27, 27);
     // background-color: cadetblue;
 }
->>> .a-component {
+/deep/ .a-component {
     margin: 16px 0;
 }
 @media print {

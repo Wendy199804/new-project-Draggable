@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="25px" viewBox="0 0 28 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52 (66869) - http://www.bohemiancoding.com/sketch -->
+    <title>下载图片</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3_1基金研究产品概览-持仓" transform="translate(-1237.000000, -1143.000000)" fill-rule="nonzero">
+            <g id="Group-7复制-2" transform="translate(70.000000, 1131.000000)">
+                <g id="Group" transform="translate(1167.000000, 12.000000)">
+                    <path d="M16.3734247,24 L3.04294287,24 C1.89419059,24 0.962942869,23.0638681 0.962942869,21.9090909 L0.962942869,3.09090909 C0.962942869,1.93613189 1.89419059,1 3.04294287,1 L24.8829429,1 C26.0316951,1 26.9629429,1.93613189 26.9629429,3.09090909 L26.9629429,15.2531085" id="Rectangle" stroke="#AAAAAA" stroke-linecap="round"></path>
+                    <polyline id="Path-2" stroke="#AAAAAA" stroke-linecap="round" stroke-linejoin="round" points="1 13.380043 8.99400032 6 16.2346867 15.0357382 22.4055371 9.625 26.9451224 15.2614204"></polyline>
+                    <circle id="Oval" fill="#AAAAAA" cx="21" cy="6" r="2"></circle>
+                    <rect id="Rectangle" stroke="#AAAAAA" x="22.5" y="15.5" width="1" height="8"></rect>
+                    <polyline id="Path-8" stroke="#AAAAAA" points="18.6064337 20.0796768 22.5267569 24 26.4470802 20.0796768"></polyline>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
