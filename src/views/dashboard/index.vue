@@ -181,7 +181,7 @@ export default {
     },
     watch: {
         myArray2(val) {
-            localStorage.setItem('list', JSON.stringify(this.myArray2))
+            localStorage.setItem('report-edit-list', JSON.stringify(this.myArray2))
         }
     },
     components: {
@@ -190,19 +190,19 @@ export default {
     },
     activated() {
         // console.log('activated') // === mounted 页面缓存时生效
-        !localStorage.getItem('list') && localStorage.setItem('list', JSON.stringify([]))
-        this.myArray2 = JSON.parse(localStorage.getItem('list'))
+        !localStorage.getItem('report-edit-list') && localStorage.setItem('report-edit-list', JSON.stringify([]))
+        this.myArray2 = JSON.parse(localStorage.getItem('report-edit-list'))
     },
     deactivated() {
         // console.log('deactivated') // === beforeDestroy 页面缓存时生效
-        // localStorage.setItem('list', JSON.stringify([this.myArray2]))
+        // localStorage.setItem('report-edit-list', JSON.stringify([this.myArray2]))
     },
     async mounted() {
         // console.log('mounted') // 刷新执行  页面缓存时失效
         await this.updateStore()
-        ;(await !localStorage.getItem('list')) && (await localStorage.setItem('list', JSON.stringify([])))
-        this.myArray2 = JSON.parse(await localStorage.getItem('list'))
-        console.log(JSON.parse(await localStorage.getItem('list')))
+        ;(await !localStorage.getItem('report-edit-list')) && (await localStorage.setItem('report-edit-list', JSON.stringify([])))
+        this.myArray2 = JSON.parse(await localStorage.getItem('report-edit-list'))
+        console.log(JSON.parse(await localStorage.getItem('report-edit-list')))
         this.myArray2 &&
             this.myArray2.forEach((item, index) => {
                 this.$nextTick(() => {
@@ -213,7 +213,7 @@ export default {
     },
     beforeDestroy() {
         // console.log(beforeDestroy)
-        localStorage.setItem('list', JSON.stringify(this.myArray2))
+        localStorage.setItem('report-edit-list', JSON.stringify(this.myArray2))
     },
     methods: {
         // setItem(name,val){
@@ -277,6 +277,15 @@ export default {
                 choosed_index === -1
                     ? [...this.myArray2, ...arr]
                     : [...this.myArray2.slice(0, choosed_index + 1), ...arr, ...this.myArray2.slice(choosed_index + 1)]
+            this.myArray2.forEach((item, index) => {
+                if(index>=(choosed_index + 1)&&index<(choosed_index + 1+arr.length)){
+                     this.$nextTick(() => {
+                    console.log(this.$refs)
+                    this.$refs[`newImg${index}`] && this.$refs[`newImg${index}`][0].render()
+                })
+                }
+               
+            })
         },
         //删除
         deleteItem(ele, index) {
