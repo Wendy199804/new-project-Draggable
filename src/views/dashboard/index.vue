@@ -53,6 +53,8 @@ export default {
     }
     & > div:nth-child(2) {
         width: 17.375rem;
+        margin-right: 12px;
+        flex-shrink: 0;
     }
     & > div:last-child {
         width: calc(100vw - 17.375rem);
@@ -61,6 +63,7 @@ export default {
     .main-edit-container {
         width: 49.5625rem;
         min-height: 1122px;
+        padding: 32px;
         background: #ffffff;
         box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.1);
         margin: 0 auto;

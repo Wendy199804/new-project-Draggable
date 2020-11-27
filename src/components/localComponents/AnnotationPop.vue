@@ -1,5 +1,5 @@
 <template>
-    <el-popover v-if="title"
+    <el-popover v-if="title || content"
         placement="right"
         width="300"
         trigger="hover"
@@ -18,7 +18,7 @@ import managerAnnotation from '@/utils/managerAnnotation'
 
 export default {
     name: 'AnnotationPop',
-    props: ['title', 'from'],
+    props: ['title', 'from', 'content'],
     data() {
         return {
 
@@ -26,6 +26,7 @@ export default {
     },
     computed: {
         annotationContent() {
+            if (this.content) return this.content
             if (!this.title) return ''
             if (this.from == 'manager') {
                 return managerAnnotation(this.title)[0]

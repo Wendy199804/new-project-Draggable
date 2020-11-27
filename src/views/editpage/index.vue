@@ -94,7 +94,7 @@
                         <!-- <i v-show="element.choosed" class="el-icon-s-unfold handle"></i> -->
                         <!-- <i class="el-icon-s-unfold " v-show="element.choosed"></i> -->
                         <span class="handle" v-show="element.choosed">移动</span>
-                        {{ element.name }}
+                        <!-- {{ element.name }} -->
                         <!-- <el-button circle @click.stop="deleteItem(element, index)">×</el-button> -->
                         <div class="a-component" :ref="`a-component-${index}`">
                             <component
@@ -144,123 +144,124 @@
 
 <script>
 import Draggable from 'vuedraggable'
-import allComponents from '@/components/dragItems/exportComponent'
+import allComponents from '@/components/componentsModule/exportComponent'
 import { mapGetters } from 'vuex'
-
 import html2canvas from 'html2canvas'
 import iframePrint from '@/components/iframe/createIframe'
+import toolslist from '@/utils/moduleList'
 
 export default {
     data() {
         return {
             allComponents: allComponents,
-            toolslist: [
-                {
-                    name: '产品概览',
-                    list: [
-                        { id: 1, name: 'height: 400px;', delete: false, component: 'item_1' },
-                        { id: 2, name: '柱状图', delete: false, component: 'item_2' },
-                        { id: 3, name: '情景分析', delete: false, component: 'item_3' },
-                        { id: 4, name: 'd', delete: false, component: 'item_4' },
-                        { id: 5, name: '表格', delete: false, component: 'item_5', istable: true },
-                        { id: 6, name: '情景分析', delete: false, component: 'item_6' }
-                    ]
-                },
-                {
-                    name: '基金经理1',
-                    list: [
-                        {
-                            id: 1,
-                            name: 'manager1 a1111111111111',
-                            delete: false,
-                            component: 'item_1',
-                            manager_id: 1
-                        },
-                        {
-                            id: 2,
-                            name: 'manager1 b',
-                            delete: false,
-                            component: 'item_2',
-                            manager_id: 1
-                        },
-                        {
-                            id: 3,
-                            name: 'manager1 c',
-                            delete: false,
-                            component: 'item_3',
-                            manager_id: 1
-                        },
-                        {
-                            id: 4,
-                            name: 'manager1 d',
-                            delete: false,
-                            component: 'item_4',
-                            manager_id: 1
-                        },
-                        {
-                            id: 5,
-                            name: 'manager1 e',
-                            delete: false,
-                            component: 'item_5',
-                            manager_id: 1
-                        },
-                        {
-                            id: 6,
-                            name: 'manager1 f',
-                            delete: false,
-                            component: 'item_6',
-                            manager_id: 1
-                        }
-                    ]
-                },
-                {
-                    name: '基金经理2',
-                    list: [
-                        {
-                            id: 1,
-                            name: 'manager2 a',
-                            delete: false,
-                            component: 'item_1',
-                            manager_id: 2
-                        },
-                        {
-                            id: 2,
-                            name: 'manager2 b',
-                            delete: false,
-                            component: 'item_2',
-                            manager_id: 2
-                        },
-                        {
-                            id: 3,
-                            name: 'manager2 c',
-                            delete: false,
-                            component: 'item_3',
-                            manager_id: 2
-                        },
-                        {
-                            id: 4,
-                            name: 'manager2 d',
-                            delete: false,
-                            component: 'item_4',
-                            manager_id: 2
-                        },
-                        {
-                            id: 5,
-                            name: 'manager2 e',
-                            delete: false,
-                            component: 'item_5',
-                            manager_id: 2
-                        },
-                        {
-                            id: 6,
-                            name: 'manager2 f',
-                            delete: false,
-                            component: 'item_6',
-                            manager_id: 2
-                        }
-                    ]
-                }
-            ],
+            toolslist: toolslist,
+            // toolslist: [
+            //     {
+            //         name: '产品概览',
+            //         list: [
+            //             { id: 1, name: 'height: 400px;', delete: false, component: 'item_1' },
+            //             { id: 2, name: '柱状图', delete: false, component: 'item_2' },
+            //             { id: 3, name: '情景分析', delete: false, component: 'item_3' },
+            //             { id: 4, name: 'd', delete: false, component: 'item_4' },
+            //             { id: 5, name: '表格', delete: false, component: 'item_5', istable: true },
+            //             { id: 6, name: '情景分析', delete: false, component: 'item_6' }
+            //         ]
+            //     },
+            //     {
+            //         name: '基金经理1',
+            //         list: [
+            //             {
+            //                 id: 1,
+            //                 name: 'manager1 a1111111111111',
+            //                 delete: false,
+            //                 component: 'item_1',
+            //                 manager_id: 1
+            //             },
+            //             {
+            //                 id: 2,
+            //                 name: 'manager1 b',
+            //                 delete: false,
+            //                 component: 'item_2',
+            //                 manager_id: 1
+            //             },
+            //             {
+            //                 id: 3,
+            //                 name: 'manager1 c',
+            //                 delete: false,
+            //                 component: 'item_3',
+            //                 manager_id: 1
+            //             },
+            //             {
+            //                 id: 4,
+            //                 name: 'manager1 d',
+            //                 delete: false,
+            //                 component: 'item_4',
+            //                 manager_id: 1
+            //             },
+            //             {
+            //                 id: 5,
+            //                 name: 'manager1 e',
+            //                 delete: false,
+            //                 component: 'item_5',
+            //                 manager_id: 1
+            //             },
+            //             {
+            //                 id: 6,
+            //                 name: 'manager1 f',
+            //                 delete: false,
+            //                 component: 'item_6',
+            //                 manager_id: 1
+            //             }
+            //         ]
+            //     },
+            //     {
+            //         name: '基金经理2',
+            //         list: [
+            //             {
+            //                 id: 1,
+            //                 name: 'manager2 a',
+            //                 delete: false,
+            //                 component: 'item_1',
+            //                 manager_id: 2
+            //             },
+            //             {
+            //                 id: 2,
+            //                 name: 'manager2 b',
+            //                 delete: false,
+            //                 component: 'item_2',
+            //                 manager_id: 2
+            //             },
+            //             {
+            //                 id: 3,
+            //                 name: 'manager2 c',
+            //                 delete: false,
+            //                 component: 'item_3',
+            //                 manager_id: 2
+            //             },
+            //             {
+            //                 id: 4,
+            //                 name: 'manager2 d',
+            //                 delete: false,
+            //                 component: 'item_4',
+            //                 manager_id: 2
+            //             },
+            //             {
+            //                 id: 5,
+            //                 name: 'manager2 e',
+            //                 delete: false,
+            //                 component: 'item_5',
+            //                 manager_id: 2
+            //             },
+            //             {
+            //                 id: 6,
+            //                 name: 'manager2 f',
+            //                 delete: false,
+            //                 component: 'item_6',
+            //                 manager_id: 2
+            //             }
+            //         ]
+            //     }
+            // ],
             toolslist2: [
                 { id: 1, name: '封面', delete: false, component: 'tools/cover' },
                 { id: 2, name: '法律声明', delete: false, component: 'tools/legalNotices' }
@@ -268,12 +269,14 @@ export default {
 
             myArray2: [
                 {
-                    id: 7,
-                    name: 'g',
+                    id: 5,
+                    name: '情景分析',
+                    parent: '风险',
                     delete: false,
-                    component: 'item_1',
                     articleNum: 0,
-                    articlelist: []
+                    articlelist: [],
+                    choosed: false,
+                    component: 'Analysis/returnAndRisk/RiskAndReturn_4'
                 }
             ],
             options: {
@@ -285,11 +288,11 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['selectFundToAnalyze','analyzeFundDateRange'])
+        ...mapGetters(['selectFundToAnalyze', 'analyzeFundDateRange'])
     },
     watch: {
-        myArray2(val){
-            localStorage.setItem('list', JSON.stringify([this.myArray2]))
+        myArray2(val) {
+            localStorage.setItem('list', JSON.stringify(this.myArray2))
         }
     },
     components: {
@@ -299,7 +302,7 @@ export default {
     activated() {
         // console.log('activated') // === mounted 页面缓存时生效
         !localStorage.getItem('list') && localStorage.setItem('list', JSON.stringify([]))
-        this.myArray2 = JSON.parse(localStorage.getItem('list'))[0]
+        this.myArray2 = JSON.parse(localStorage.getItem('list'))
     },
     deactivated() {
         // console.log('deactivated') // === beforeDestroy 页面缓存时生效
@@ -308,18 +311,20 @@ export default {
     async mounted() {
         // console.log('mounted') // 刷新执行  页面缓存时失效
         await this.updateStore()
-        !localStorage.getItem('list') && localStorage.setItem('list', JSON.stringify([[]]))
-        this.myArray2 = JSON.parse(await localStorage.getItem('list'))[0]
+        ;(await !localStorage.getItem('list')) && (await localStorage.setItem('list', JSON.stringify([])))
+        this.myArray2 = JSON.parse(await localStorage.getItem('list'))
+        console.log(JSON.parse(await localStorage.getItem('list')))
         this.myArray2 &&
             this.myArray2.forEach((item, index) => {
                 this.$nextTick(() => {
-                    this.$refs[`newImg${index}`][0].render()
+                    console.log(this.$refs)
+                    this.$refs[`newImg${index}`] && this.$refs[`newImg${index}`][0].render()
                 })
             })
     },
     beforeDestroy() {
         // console.log(beforeDestroy)
-        localStorage.setItem('list', JSON.stringify([this.myArray2]))
+        localStorage.setItem('list', JSON.stringify(this.myArray2))
     },
     methods: {
         // setItem(name,val){
@@ -524,7 +529,7 @@ export default {
             this.myArray2.map((item, index) => {
                 item.choosed = false
                 if (!item.istable) {
-                    // console.log(this.$refs[`newImg${index}`][0])
+                    console.log(this.$refs[`newImg${index}`][0])
                     this.$refs[`newImg${index}`][0].toimg() //在子组件里转
                     // this.getImg(`newImg${index}`, index) //在父组件转
                 }
@@ -603,16 +608,18 @@ export default {
                 secucode: '000960',
                 type: 1
             })
-        },
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '@/styles/chart.scss';
+
 /deep/.content {
     position: relative;
     background-color: #ffffff;
-    .relative{
+    .relative {
         position: relative;
     }
 }
@@ -648,7 +655,7 @@ export default {
 .empty-group {
     width: 100%;
     height: 87%;
-    padding: 20px;
+    padding: 32px;
     border: 1px solid blueviolet;
     overflow-y: auto;
 

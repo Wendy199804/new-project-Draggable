@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Gradient from '@/components/Manager/components/gradientChart'
+import Gradient from '@/components/localComponents/gradientChart'
 
 export default {
     props: {

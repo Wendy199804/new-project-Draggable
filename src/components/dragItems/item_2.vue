@@ -1,6 +1,6 @@
 <template>
     <div class="component-wrap" ref="component-wrap">
-        <div id="component-wrap" v-show="!finished">
+        <div id="component-wrap1" v-show="!finished">
             item222
             <div class="chart" ref="chart"></div>
         </div>
@@ -16,9 +16,9 @@ export default {
     mixins: [toimg],
     data() {
         return {
-            finished: false,
             chart: '',
-            blob: '',
+            
+            id:'component-wrap1',
         }
     },
     methods: {
@@ -27,6 +27,7 @@ export default {
                 this.draw()
             })
         },
+        // toimg(){},
         draw() {
             // console.log(this.$echarts);
             let chart = this.$echarts.init(this.$refs.chart)

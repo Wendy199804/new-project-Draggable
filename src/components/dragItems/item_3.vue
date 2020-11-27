@@ -1,60 +1,63 @@
 <template>
-    <div class="risk-and-return4">
-        <moduletitle title="情景分析">
-            <div class="benchmark">
-                <span>基准</span>
-                <el-select v-model="index_value" placeholder="请选择" size="mini" class="mr" @change="handleResult()">
-                    <el-option v-for="(item, index) in indexOptions" :key="index" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-            </div>
+    <div>
+        <div class="risk-and-return4" id="component-wrap2"  v-show="!finished">
+            <moduletitle title="情景分析">
+                <div class="benchmark">
+                    <span>基准</span>
+                    <el-select v-model="index_value" placeholder="请选择" size="mini" class="mr" @change="handleResult()">
+                        <el-option v-for="(item, index) in indexOptions" :key="index" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                </div>
 
-            <div class="timeframe">
-                <span>时段</span>
-                <vDateRangePicker ref="range" type="year" class="mr" @change="getChartData" />
-            </div>
-        </moduletitle>
-        <div class="content">
-            <div class="relative">
-                <vHalfChart
-                    id="qjfx"
-                    ref="chart"
-                    type="line"
-                    grid="grid_half"
-                    :legend="legend"
-                    :xData="xData"
-                    :seriesData="seriesData"
-                    :seriesOptions="seriesOptions"
-                    :otherOptions="otherOptions"
-                    :isPct="true"
-                />
-                <vLoading :show="isLoading" />
-                <vNodata :show="!seriesData && !isLoading" />
-            </div>
-            <div>
+                <div class="timeframe">
+                    <span>时段</span>
+                    <vDateRangePicker ref="range" type="year" class="mr" @change="getChartData" />
+                </div>
+            </moduletitle>
+            <div class="content">
+                <div class="relative">
+                    <vHalfChart
+                        id="qjfx"
+                        ref="chart"
+                        type="line"
+                        grid="grid_half"
+                        :legend="legend"
+                        :xData="xData"
+                        :seriesData="seriesData"
+                        :seriesOptions="seriesOptions"
+                        :otherOptions="otherOptions"
+                        :isPct="true"
+                    />
+                    <vLoading :show="isLoading" />
+                    <vNodata :show="!seriesData && !isLoading" />
+                </div>
                 <div>
-                    <el-table :data="allTableData" v-loading="isLoading">
-                        <el-table-column label="事件" prop="title" align="center" width="100"></el-table-column>
-                        <el-table-column label="起止日期" align="center" width="200">
-                            <template slot-scope="scope"> {{ scope.row.start }} - {{ scope.row.end }} </template>
-                        </el-table-column>
-                        <el-table-column :label="fund_name || '当前基金'" prop="current" align="center">
-                            <template slot-scope="scope">
-                                <div :class="scope.row.current2 > 0 ? 'color-red' : scope.row.current2 < 0 ? 'color-green' : 'color-black'">
-                                    {{ scope.row.current }}
-                                </div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column :label="index_name || '当前指数'" prop="index" align="center" width="120">
-                            <template slot-scope="scope">
-                                <div :class="scope.row.index2 > 0 ? 'color-red' : scope.row.index2 < 0 ? 'color-green' : 'color-black'">
-                                    {{ scope.row.index }}
-                                </div>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <div>
+                        <el-table :data="allTableData" v-loading="isLoading">
+                            <el-table-column label="事件" prop="title" align="center" width="100"></el-table-column>
+                            <el-table-column label="起止日期" align="center" width="200">
+                                <template slot-scope="scope"> {{ scope.row.start }} - {{ scope.row.end }} </template>
+                            </el-table-column>
+                            <el-table-column :label="fund_name || '当前基金'" prop="current" align="center">
+                                <template slot-scope="scope">
+                                    <div :class="scope.row.current2 > 0 ? 'color-red' : scope.row.current2 < 0 ? 'color-green' : 'color-black'">
+                                        {{ scope.row.current }}
+                                    </div>
+                                </template>
+                            </el-table-column>
+                            <el-table-column :label="index_name || '当前指数'" prop="index" align="center" width="120">
+                                <template slot-scope="scope">
+                                    <div :class="scope.row.index2 > 0 ? 'color-red' : scope.row.index2 < 0 ? 'color-green' : 'color-black'">
+                                        {{ scope.row.index }}
+                                    </div>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
                 </div>
             </div>
         </div>
+        <img v-show="finished" :src="blob" alt="" />
     </div>
 </template>
 
@@ -62,10 +65,10 @@
 import { benchmarkValue } from '@/utils/analyze'
 import { mapGetters } from 'vuex'
 import { push_request } from '@/api/analysis'
+import toimg from '@/mixins/toImg'
 
 export default {
-    components: {
-    },
+    mixins: [toimg],
     data() {
         return {
             // benchmarkOptions: allBenchmark, // 基准可选
@@ -92,11 +95,13 @@ export default {
             totalSize: 0,
             pageSize: 10,
             currentPage: 1,
-            tableData: []
+            tableData: [],
+            
+            id:'component-wrap2',//需要转为图片的部分的唯一 id
         }
     },
     computed: {
-        ...mapGetters(['selectFundToAnalyze','analyzeFundDateRange']),
+        ...mapGetters(['selectFundToAnalyze', 'analyzeFundDateRange']),
         fund_name() {
             return this.selectFundToAnalyze.name
         },
@@ -166,7 +171,7 @@ export default {
                         axisPointer: {
                             type: 'none'
                         },
-                        formatter: (params) => {
+                        formatter: params => {
                             let row = this.allTableData.find(item => {
                                 let dateNum = params[0].name.split('-').join(''),
                                     startNum = item.start.split('-').join(''),
@@ -208,7 +213,7 @@ export default {
                                             color: item.title.indexOf('上行') > 0 ? 'rgba(253, 72, 76, .1)' : 'rgba(80, 199, 90, .1)'
                                         },
                                         label: {
-                                            show: (end - start) > len * 0.1
+                                            show: end - start > len * 0.1
                                         }
                                     },
                                     {
@@ -354,44 +359,5 @@ export default {
         height: 320px;
     }
 }
-/deep/.legend {
-        font-size: 12px;
-        color: #555;
-        // 横向排列图例
-        &.row {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 0 10px;
-            p {
-                margin-right: 20px;
-                &:last-child {
-                    margin-right: 0;
-                }
-            }
-        }
-        p {
-            // height: 20px;
-            line-height: 20px;
-            span {
-                // display: inline-block;
-                // vertical-align: middle;
-                // margin: -2px 3px 0 0;
-                float: left;
-                margin: 4px 4px 0 0;
-            }
-        }
-        // 长方形图例
-        .line span {
-            width: 22px;
-            height: 3px;
-            margin-top: 8px;
-        }
-        // 正方形图例
-        .rect span {
-            width: 12px;
-            height: 12px;
-        }
-    }
+
 </style>

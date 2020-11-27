@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    props: ['xData', 'yData', 'seriesData'],
+    props: ['xData', 'yData', 'seriesData', 'levels'],
     data() {
         return {
 
@@ -18,6 +18,18 @@ export default {
             chart.clear()
             chart.resize()
             
+            let arr = this.levels || [0, 10, 25, 50]
+            let pieces = [
+                {lte: arr[0], color: '#F5F5F5'},
+                {gte: arr[0], max: arr[1]-1, color: '#E5ECFF'},
+                {gte: arr[1], max: arr[2]-1, color: '#8FAEFE'},
+                {gte: arr[2], max: arr[3]-1, color: '#6F8EE6'},
+                {gte: arr[3], label: `${arr[3]}+`, color: '#4E7CEE'}
+            ]
+            let total = this.seriesData.reduce((sum, item) => {
+                return sum + item[2]
+            }, 0)
+
             let option = {
                 grid: {
                     top: 25,
@@ -59,13 +71,7 @@ export default {
                     align: 'left',
                     itemWidth: 12,
                     itemHeight: 12,
-                    pieces: [
-                        {gte: 50, label: '50+', color: '#4E7CEE'},
-                        {gte: 25, max: 49, color: '#6F8EE6'},
-                        {gte: 10, max: 24, color: '#8FAEFE'},
-                        {gte: 0, max: 9, color: '#E5ECFF'},
-                        {lte: 0, color: '#F5F5F5'}
-                    ],
+                    pieces: pieces,
                     show: false
                 },
                 series: [{
@@ -73,13 +79,17 @@ export default {
                     type: 'heatmap',
                     zlevel: -1, // 用于分层，显示网格线
                     data: this.seriesData.map(item => {
+                        let ratio = Math.round(item[2] / total * 100)
                         return {
-                            value: item,
+                            value: [item[0], item[1], ratio],
                             label: {
                                 show: true,
                                 fontSize: 30,
                                 fontWeight: 200,
-                                color: item[2] < 25 ? '#333' : '#fff'
+                                color: ratio < 25 ? '#333' : '#fff',
+                                formatter: () => {
+                                    return item[2]
+                                }
                             }
                         }
                     })

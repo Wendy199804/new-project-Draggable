@@ -44,14 +44,13 @@
 </template>
 
 <script>
-import Waterrank from '@/components/Analysis/productOverview/components/waterRank'
+import Waterrank from '@/components/localComponents/waterRank'
 import { toPercent } from '@/utils/analyze'
 import { push_request } from '@/api/analysis'
 import { mapGetters } from 'vuex'
 
 export default {
     components: {
-        moduletitle,
         Waterrank,
     },
     data() {
