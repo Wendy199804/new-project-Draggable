@@ -1,10 +1,7 @@
 <template>
     <div class="wrap">
         <moduletitle title="相似基金">
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="content">
             <el-table :data="tableData" style="width: 100%" v-loading="isLoading">

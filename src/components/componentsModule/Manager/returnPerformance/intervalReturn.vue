@@ -22,10 +22,7 @@
                     style="width:150px"
                 ></el-date-picker>
             </div>
-            <div>
-                <svg-icon icon-class="download" @click="handleDownload"></svg-icon>
-                <svg-icon icon-class="reload" @click="refreshChart"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="card-body no-padding-l chart-wrap content">
             <vLoading :show="isLoading" />

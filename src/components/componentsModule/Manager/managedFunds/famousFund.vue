@@ -11,7 +11,6 @@
                 <p style="margin-bottom: 8px">
                     <span class="bold">收益走势</span>
                     <span class="right">
-                        <svg-icon icon-class="download" @click="handleDownload"></svg-icon>
                     </span>
                 </p>
             </div>

@@ -1,10 +1,7 @@
 <template>
     <div>
         <moduletitle title="区间收益" type="manager">
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="content">
             <el-table :data="tableData" ref="table" v-loading="isLoading" style="width: 100%" class="table2">

@@ -12,10 +12,7 @@
                     />
                 </keep-alive>
             </div>
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="refreshChart"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="content">
             <div :class="['table-contain',toggle_down ? 'div-height-auto' : 'div-height0']">

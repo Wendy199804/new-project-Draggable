@@ -27,10 +27,7 @@
                     ref="range" @change="getBrinsonData"
                 />
             </div>
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle>
 
         <div class="card-body" data-reportFlag="true">

@@ -1,10 +1,7 @@
 <template>
     <div>
         <!-- <moduletitle title="基金公司" type="manager">
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle> -->
         <!-- <div class="content"> -->
             <!-- <div v-loading.lock="isLoading" class="info">

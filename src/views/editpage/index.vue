@@ -748,9 +748,7 @@ export default {
     color: rgb(148, 27, 27);
     // background-color: cadetblue;
 }
-/deep/ .a-component {
-    margin: 16px 0;
-}
+
 @media print {
     // size: auto; /* auto is the initial value */
     // margin: 0mm; /* this affects the margin in the printer settings */

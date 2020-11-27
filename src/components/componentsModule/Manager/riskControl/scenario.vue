@@ -12,11 +12,7 @@
                 <span>时段</span>
                 <vDateRangePicker ref="range" type="year" class="mr" @change="getChartData" />
             </div>
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="download" @click="handleDownload"></svg-icon>
-                <svg-icon icon-class="reload" @click="refreshChart"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="content">
             <div class="relative">

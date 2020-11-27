@@ -1,10 +1,7 @@
 <template>
     <div class="intervalReturn">
         <moduletitle :title="'区间收益'" type="manager">
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="content">
             <el-table v-loading="isLoading" :data="tableData" style="width: 100%">

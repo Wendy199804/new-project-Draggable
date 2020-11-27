@@ -17,10 +17,7 @@
                     <vDateRangePicker ref="range" type="year" class="mr" :config="['custom']" @change="getChartData" />
                 </keep-alive>
             </div>
-            <div>
-                <svg-icon icon-class="download" @click="handleDownload"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="content">
             <vNodata :show="!result && !isLoading" />

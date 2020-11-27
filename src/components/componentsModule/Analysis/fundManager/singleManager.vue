@@ -98,11 +98,6 @@
                         <el-option v-for="(item, index) in typeOptions" :key="index" :label="item" :value="item"></el-option>
                     </el-select>
                 </div>
-                <div style="margin-left: 6px">
-                    <svg-icon v-if="activeTab == '0'" icon-class="download" @click="handleDownload"></svg-icon>
-                    <svg-icon v-else icon-class="excel" @click="handleExcel"></svg-icon>
-                    <svg-icon icon-class="reload" @click="render"></svg-icon>
-                </div>
             </moduletitle>
             <div v-show="activeTab == 0" class="relative" :id="`singleManager${manager.personalCode}`">
                 <vHalfChart ref="chart" type="line" grid="grid_r" :legend="legend" :xData="xData" :seriesData="seriesData" :isPct="true" />

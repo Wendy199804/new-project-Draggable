@@ -31,10 +31,7 @@
                 />
             </div> -->
 
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle>
 
         <TopStockHoldings ref="comp0" v-show="activeTab == 0" />

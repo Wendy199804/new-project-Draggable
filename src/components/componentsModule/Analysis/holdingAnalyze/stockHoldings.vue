@@ -7,34 +7,7 @@
             :isright="true"
             :curtab="tabList[activeTab]"
             @clickTab="(index) => {activeTab = index, render()}"
-        >
-            <!-- <div class="timeframe">
-                <span>报告期</span>
-                <vDatePointPicker 
-                    v-if="activeTab == 0"
-                    ref="point"
-                />
-                <vDatePointPicker 
-                    v-else
-                    ref="point"
-                    @change="handleChange"
-                />
-            </div>
-            <div class="timeframe"
-                v-show="activeTab == 0"
-                style="width: 0; margin-left: 0; overflow: hidden;"
-            >
-                <span>时段</span>
-                <vDateRangePicker
-                    ref="range"
-                    @change="handleChange"
-                />
-            </div> -->
-
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+        >           
         </moduletitle>
 
         <TopStockHoldings ref="comp0" v-show="activeTab == 0" />

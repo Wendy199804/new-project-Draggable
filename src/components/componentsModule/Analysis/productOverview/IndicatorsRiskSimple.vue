@@ -7,10 +7,7 @@
                     <el-option v-for="item in timerange_options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
                 </el-select>
             </div>
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="content">
             <vNodata :show="tableData.length == 0" />

@@ -32,9 +32,6 @@
                     style="margin-left: 0;"
                     @click="isChart = false">
                 </svg-icon>
-                <svg-icon icon-class="download" @click="handleDownload"></svg-icon>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
             </div>
         </moduletitle>
 

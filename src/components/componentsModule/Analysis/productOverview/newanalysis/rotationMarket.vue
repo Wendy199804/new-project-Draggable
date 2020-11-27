@@ -1,10 +1,7 @@
 <template>
     <div class="rotation-in-market">
         <moduletitle title="市场轮动表现">
-            <div>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="render"></svg-icon>
-            </div>
+            
         </moduletitle>
         <div class="content">
             <el-table v-loading="isLoading" :data="tableData" style="width: 100%" :default-sort="{ prop: '1', order: 'descending' }">

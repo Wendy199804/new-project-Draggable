@@ -40,9 +40,6 @@
                     <svg-icon :icon-class=" nowtab === 'chart'? 'is-chart-active' : 'is-chart'" @click="changeToChart"></svg-icon>
                     <svg-icon :icon-class=" nowtab === 'table'? 'is-table-active' : 'is-table'" @click="changeToTable"></svg-icon>
                 </div>
-                <svg-icon icon-class="download" @click="handleDownload"></svg-icon>
-                <svg-icon icon-class="excel" @click="handleExcel"></svg-icon>
-                <svg-icon icon-class="reload" @click="refreshChart"></svg-icon>
             </div>
         </moduletitle>
 
