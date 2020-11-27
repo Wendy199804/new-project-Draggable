@@ -4,7 +4,10 @@
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="功能模板" name="first">
                     <div v-for="(dragitem, index) in toolslist" :key="index">
-                        <div class="draggable-item bold">{{ dragitem.name }} <span @click="addAll(dragitem.list)" class="cursor-pointer all-draggable-item-add font-weight-500">全部添加</span></div>
+                        <div class="draggable-item bold">
+                            {{ dragitem.name }}
+                            <span @click="addAll(dragitem.list)" class="cursor-pointer all-draggable-item-add font-weight-500">全部添加</span>
+                        </div>
                         <Draggable
                             class="cards-group"
                             v-model="dragitem.list"
@@ -51,89 +54,89 @@
         <div>
             <div class="main-edit-container">
                 <Draggable
-                class="empty-group"
-                id="printcontent"
-                v-model="myArray2"
-                :animation="200"
-                :options="{
-                    group: { name: 'group', fallbackTolerance: 0 },
-                    scroll: true,
-                    scrollSpeed: 2
-                }"
-                ghostClass="ghost2"
-                chosen-class="chosen"
-                handle=".handle"
-            >
-                <transition-group id="printpdf">
-                    <div
-                        v-for="(element, index) in myArray2"
-                        :key="element.id"
-                        :ref="`cur-com-${index}`"
-                        :class="[
-                            element.delete ? 'to-right' : '',
-                            element.choosed ? 'border' : '',
-                            'list-group-item',
-                            'my-list-group-item',
-                            'cursor-auto'
-                        ]"
-                        @click="chooseItem(element, index)"
-                    >
-                        <div v-show="element.choosed" class="edit">
-                            <span class="handle" v-show="element.choosed">移动</span>
-                            <span @click.stop="unChoosed(element, index)">取消选中</span>
-                            <span @click.stop="moveUp(element, index)">上移</span>
-                            <span @click.stop="moveDown(element, index)">下移</span>
-                            <span @click.stop="copyItem(element, index)">复制</span>
-                            <span @click.stop="deleteItem(element, index)">删除</span>
-                            <span @click.stop="addArticle(element, index)">添加文案</span>
-                        </div>
-                        <!-- <i v-show="element.choosed" class="el-icon-s-unfold handle"></i> -->
-                        <!-- <i class="el-icon-s-unfold " v-show="element.choosed"></i> -->
-                        
-                        <!-- {{ element.name }} -->
-                        <!-- <el-button circle @click.stop="deleteItem(element, index)">×</el-button> -->
-                        <div class="a-component" :ref="`a-component-${index}`">
-                            <component
-                                v-show="!element.blob"
-                                :is="allComponents[element.component]"
-                                :id="`newImg${index}`"
-                                :ref="`newImg${index}`"
-                                :choosed="element.choosed"
-                            ></component>
-                            <img :src="element.blob" style="width: 100%" />
-                        </div>
-
+                    class="empty-group"
+                    id="printcontent"
+                    v-model="myArray2"
+                    :animation="200"
+                    :options="{
+                        group: { name: 'group', fallbackTolerance: 0 },
+                        scroll: true,
+                        scrollSpeed: 2
+                    }"
+                    ghostClass="ghost2"
+                    chosen-class="chosen"
+                    handle=".handle"
+                >
+                    <transition-group id="printpdf">
                         <div
-                            v-show="element.articlelist && element.articlelist.length > 0"
-                            :style="{ border: element.choosed ? '1px dashed fuchsia' : 'none' }"
-                            @click.stop
-                            class="textarea-wrap"
+                            v-for="(element, index) in myArray2"
+                            :key="element.id"
+                            :ref="`cur-com-${index}`"
+                            :class="[
+                                element.delete ? 'to-right' : '',
+                                element.choosed ? 'border' : '',
+                                'list-group-item',
+                                'my-list-group-item',
+                                'cursor-auto'
+                            ]"
+                            @click="chooseItem(element, index)"
                         >
-                            <!-- <textarea>我是一个文本框。</textarea> -->
-                            <div v-for="(item, index2) in element.articlelist" :key="index2">
-                                <!-- 文案个数 -->
-                                <div v-show="element.choosed && item.focus">
-                                    文字颜色<el-color-picker v-model="item.color" @change="fontColorChange(index)" size="mini"></el-color-picker>
-                                </div>
-                                <div
-                                    :contenteditable="element.choosed"
-                                    @focus="articleFocus(item, index, index2, $event)"
-                                    @blur="articleBlur(item, index, index2, $event)"
-                                    :style="{ color: item.color }"
-                                    class="custom-article"
-                                >
-                                    <b>这是一个文案，</b>点击可以编辑
+                            <div v-show="element.choosed" class="edit">
+                                <span class="handle" v-show="element.choosed">移动</span>
+                                <span @click.stop="unChoosed(element, index)">取消选中</span>
+                                <span @click.stop="moveUp(element, index)">上移</span>
+                                <span @click.stop="moveDown(element, index)">下移</span>
+                                <span @click.stop="copyItem(element, index)">复制</span>
+                                <span @click.stop="deleteItem(element, index)">删除</span>
+                                <span @click.stop="addArticle(element, index)">添加文案</span>
+                            </div>
+                            <!-- <i v-show="element.choosed" class="el-icon-s-unfold handle"></i> -->
+                            <!-- <i class="el-icon-s-unfold " v-show="element.choosed"></i> -->
+
+                            <!-- {{ element.name }} -->
+                            <!-- <el-button circle @click.stop="deleteItem(element, index)">×</el-button> -->
+                            <div class="a-component" :ref="`a-component-${index}`">
+                                <component
+                                    v-show="!element.blob"
+                                    :is="allComponents[element.component]"
+                                    :id="`newImg${index}`"
+                                    :ref="`newImg${index}`"
+                                    :choosed="element.choosed"
+                                ></component>
+                                <img :src="element.blob" style="width: 100%" />
+                            </div>
+
+                            <div
+                                v-show="element.articlelist && element.articlelist.length > 0"
+                                :style="{ border: element.choosed ? '1px dashed fuchsia' : 'none' }"
+                                @click.stop
+                                class="textarea-wrap"
+                            >
+                                <!-- <textarea>我是一个文本框。</textarea> -->
+                                <div v-for="(item, index2) in element.articlelist" :key="index2">
+                                    <!-- 文案个数 -->
+                                    <div v-show="element.choosed && item.focus">
+                                        文字颜色<el-color-picker v-model="item.color" @change="fontColorChange(index)" size="mini"></el-color-picker>
+                                    </div>
+                                    <div
+                                        :contenteditable="element.choosed"
+                                        @focus="articleFocus(item, index, index2, $event)"
+                                        @blur="articleBlur(item, index, index2, $event)"
+                                        :style="{ color: item.color }"
+                                        class="custom-article"
+                                    >
+                                        <b>这是一个文案，</b>点击可以编辑
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </transition-group>
-            </Draggable>
-            <!-- <el-button @click="doPrint">打印</el-button> -->
-            <el-button @click="doToimg">第一步、转图片</el-button>
-            <el-button @click="doPdf">第二步、导出PDF</el-button>
-            <img :src="blob" style="width: 100%" />
-            <iframePrint v-if="printHtml" :html="printHtml" />
+                    </transition-group>
+                </Draggable>
+                <!-- <el-button @click="doPrint">打印</el-button> -->
+                <el-button @click="doToimg">第一步、转图片</el-button>
+                <el-button @click="doPdf">第二步、导出PDF</el-button>
+                <img :src="blob" style="width: 100%" />
+                <iframePrint v-if="printHtml" :html="printHtml" />
             </div>
         </div>
     </div>
@@ -278,13 +281,12 @@ export default {
                     ? [...this.myArray2, ...arr]
                     : [...this.myArray2.slice(0, choosed_index + 1), ...arr, ...this.myArray2.slice(choosed_index + 1)]
             this.myArray2.forEach((item, index) => {
-                if(index>=(choosed_index + 1)&&index<(choosed_index + 1+arr.length)){
-                     this.$nextTick(() => {
-                    console.log(this.$refs)
-                    this.$refs[`newImg${index}`] && this.$refs[`newImg${index}`][0].render()
-                })
+                if (index >= choosed_index + 1 && index < choosed_index + 1 + arr.length) {
+                    this.$nextTick(() => {
+                        console.log(this.$refs)
+                        this.$refs[`newImg${index}`] && this.$refs[`newImg${index}`][0].render()
+                    })
                 }
-               
             })
         },
         //删除
@@ -532,7 +534,7 @@ export default {
         background: #ffffff;
         border: 1px solid #aaaaaa;
         position: fixed;
-        top:66px
+        top: 66px;
     }
     & > div:nth-child(2) {
         width: 17.375rem;
@@ -570,5 +572,4 @@ export default {
         border-bottom: 1px solid #ffffff;
     }
 }
-
 </style>
