@@ -3,30 +3,38 @@
         <div>
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="功能模板" name="first">
-                    <div v-for="(dragitem, index) in toolslist" :key="index">
-                        <div class="draggable-item bold">
-                            {{ dragitem.name }}
-                            <span @click="addAll(dragitem.list)" class="cursor-pointer all-draggable-item-add font-weight-500">全部添加</span>
-                        </div>
-                        <Draggable
-                            class="cards-group"
-                            v-model="dragitem.list"
-                            :animation="200"
-                            :options="{
-                                sort: false,
-                                group: { name: 'group', pull: 'clone', put: false }
-                            }"
-                            ghostClass="ghost1"
-                            @end="end1"
-                        >
-                            <transition-group>
-                                <div v-for="element in dragitem.list" :key="element.id" class="draggable-item">
-                                    {{ element.name }}
-                                    <span @click="addItem(element)" class="add-draggable-item">+</span>
+                    <el-collapse v-model="left_activeNames" @change="handleChange">
+                        <el-collapse-item v-for="(dragitem, index) in toolslist" :key="index" :title="dragitem.name" :name="index">
+                            <template slot="title">
+                                <div class="draggable-item bold">
+                                    {{ dragitem.name }}
+                                    <span @click="addAll(dragitem.list)" class="cursor-pointer all-draggable-item-add font-weight-500">全部添加</span>
                                 </div>
-                            </transition-group>
-                        </Draggable>
-                    </div>
+                            </template>
+                            <Draggable
+                                class="cards-group"
+                                v-model="dragitem.list"
+                                :animation="200"
+                                :options="{
+                                    sort: false,
+                                    group: { name: 'group', pull: 'clone', put: false }
+                                }"
+                                ghostClass="ghost1"
+                                @end="end1"
+                            >
+                                <transition-group>
+                                    <div v-for="element in dragitem.list" :key="element.id" class="draggable-item">
+                                        {{ element.name }}
+                                        <span @click="addItem(element)" class="add-draggable-item">+</span>
+                                    </div>
+                                </transition-group>
+                            </Draggable>
+                        </el-collapse-item>
+                    </el-collapse>
+
+                    <!-- <div v-for="(dragitem, index) in toolslist" :key="index">
+                        
+                    </div> -->
                 </el-tab-pane>
                 <el-tab-pane label="工具" name="second">
                     <Draggable
@@ -82,7 +90,7 @@
                             @click="chooseItem(element, index)"
                         >
                             <div v-show="element.choosed" class="edit">
-                                <span class="handle" v-show="element.choosed">移动</span>
+                                <span class="handle" v-show="element.choosed"><svg-icon icon-class="move" /></span>
                                 <span @click.stop="unChoosed(element, index)">取消选中</span>
                                 <span @click.stop="moveUp(element, index)">上移</span>
                                 <span @click.stop="moveDown(element, index)">下移</span>
@@ -90,11 +98,6 @@
                                 <span @click.stop="deleteItem(element, index)">删除</span>
                                 <span @click.stop="addArticle(element, index)">添加文案</span>
                             </div>
-                            <!-- <i v-show="element.choosed" class="el-icon-s-unfold handle"></i> -->
-                            <!-- <i class="el-icon-s-unfold " v-show="element.choosed"></i> -->
-
-                            <!-- {{ element.name }} -->
-                            <!-- <el-button circle @click.stop="deleteItem(element, index)">×</el-button> -->
                             <div class="a-component" :ref="`a-component-${index}`">
                                 <component
                                     v-show="!element.blob"
@@ -112,7 +115,6 @@
                                 @click.stop
                                 class="textarea-wrap"
                             >
-                                <!-- <textarea>我是一个文本框。</textarea> -->
                                 <div v-for="(item, index2) in element.articlelist" :key="index2">
                                     <!-- 文案个数 -->
                                     <div v-show="element.choosed && item.focus">
@@ -132,7 +134,6 @@
                         </div>
                     </transition-group>
                 </Draggable>
-                <!-- <el-button @click="doPrint">打印</el-button> -->
                 <el-button @click="doToimg">第一步、转图片</el-button>
                 <el-button @click="doPdf">第二步、导出PDF</el-button>
                 <img :src="blob" style="width: 100%" />
@@ -176,7 +177,8 @@ export default {
             },
             blob: '',
             printHtml: '',
-            activeName: 'first'
+            activeName: 'first',
+            left_activeNames: [1, 2, 3]
         }
     },
     computed: {
@@ -508,6 +510,9 @@ export default {
                 secucode: '000960',
                 type: 1
             })
+        },
+        handleChange(val) {
+            console.log(val)
         }
     }
 }
